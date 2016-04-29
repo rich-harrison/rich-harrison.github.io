@@ -23,15 +23,6 @@
 .controls {
   perspective: 8000px;
 }
-.controls button {
-  padding: 10px;
-  background-color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 0 auto;
-  display: block;
-  margin-top: 100px;
-}
 .controls #dice {
   transform: translateZ(-100px) rotateX(130deg) rotateY(220deg) rotateZ(323deg);
   transition: 1.5s cubic-bezier(0.42, 0, 0.34, 1.14);

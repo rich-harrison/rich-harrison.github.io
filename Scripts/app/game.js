@@ -10,7 +10,7 @@ aj.game = (function (args) {
     me.boxSizeX = 70,
     me.boxSizeY = 70,
     me.boxMargin = 10,
-    me.tiles= new Array(),
+    me.tiles = new Array(),
     me.context,
     me.tileBackground,
     me.playerCurrentTile = 1,
@@ -18,6 +18,9 @@ aj.game = (function (args) {
     me.playerPosX = 45,
     me.playerPosY = 45,
     me.dialog,
+    me.orange = "#f05126";
+    me.purple = "#422562";
+    me.blue = "#51c5dc";
     me.init();
 });
 
@@ -85,6 +88,7 @@ aj.game.prototype = {
 
             curX += me.boxMargin;
             me.renderTile(curX, curY, curTile);
+            me.registerNewTileCreated(curX, curY);
             curTile++;
 
             if (x < me.sizeX - 1)
@@ -96,6 +100,7 @@ aj.game.prototype = {
             curY += me.boxMargin;
             curY += me.boxSizeY;
             me.renderTile(curX, curY, curTile);
+            me.registerNewTileCreated(curX, curY);
             curTile++;
         }
 
@@ -104,6 +109,7 @@ aj.game.prototype = {
             curX -= me.boxSizeX;
             curX -= me.boxMargin;
             me.renderTile(curX, curY, curTile);
+            me.registerNewTileCreated(curX, curY);
             curTile++;
         }
 
@@ -112,6 +118,7 @@ aj.game.prototype = {
             curY -= me.boxMargin;
             curY -= me.boxSizeY;
             me.renderTile(curX, curY, curTile);
+            me.registerNewTileCreated(curX, curY);
             curTile++;
         }
     },
@@ -134,15 +141,18 @@ aj.game.prototype = {
         var me = this;
         me.context.beginPath();
         me.context.lineWidth = "1";
-        me.context.fillStyle = me.isEven(curTile) ? "#422562" : "#f05126";
+        me.context.fillStyle = me.isEven(curTile) ? me.purple : me.orange;
         me.context.strokeStyle = "white";
         me.context.rect(x, y, me.boxSizeX, me.boxSizeY);
-
-        var coords = [curTile, x, y];
-        me.tiles.push(coords);
-
         me.context.fill();
         me.context.stroke();
+    },
+
+    registerNewTileCreated(x, y, curTile) {
+        var me = this;
+        var coords = [curTile, x, y];
+        me.tiles.push(coords);
+        curTile++;
     },
 
     renderPlayer(tileNumber) {
@@ -150,7 +160,7 @@ aj.game.prototype = {
         var me = this;
         var newPos = me.tiles[tileNumber - 1];
 
-        me.context.fillStyle = "#51c5dc";
+        me.context.fillStyle = me.blue;
         me.context.lineWidth = "3";
         me.context.strokeStyle = "white";
         me.context.beginPath();
