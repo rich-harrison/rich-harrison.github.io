@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "Content/css/layout.css",
+    "inputFile": "Content/css/layout.less"
+  },
+  {
+    "outputFile": "Content/css/dice.css",
+    "inputFile": "Content/css/dice.less"
+  },
+  {
+    "outputFile": "Content/css/default.css",
+    "inputFile": "Content/css/default.less"
+  },
+  {
+    "outputFile": "Content/css/radio-pulse.css",
+    "inputFile": "Content/css/radio-pulse.less"
+  }
+]

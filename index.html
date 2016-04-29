@@ -1,11 +1,110 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Playground</title>
+    <title></title>
+    <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="Content/css/default.css" />
+    <link type="text/css" rel="stylesheet" href="Content/css/layout.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/css/dice.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/css/radio-pulse.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 </head>
 <body>
     <div class="content">
-        Hi
+        <canvas id="canvas1"></canvas>
     </div>
-  </body>
+    <div class="controls">
+        <div class="dice">
+            <button class="roll-button">Roll Die</button>
+            <div id="dice">
+                <div class="side front 1">
+                    <div class="dot center"></div>
+                </div>
+                <div class="side front inner 1"></div>
+                <div class="side top 2">
+                    <div class="dot dtop dleft"></div>
+                    <div class="dot dbottom dright"></div>
+                </div>
+                <div class="side top inner 2"></div>
+                <div class="side right 3">
+                    <div class="dot dtop dleft"></div>
+                    <div class="dot center"></div>
+                    <div class="dot dbottom dright"></div>
+                </div>
+                <div class="side right inner 3"></div>
+                <div class="side left 4">
+                    <div class="dot dtop dleft"></div>
+                    <div class="dot dtop dright"></div>
+                    <div class="dot dbottom dleft"></div>
+                    <div class="dot dbottom dright"></div>
+                </div>
+                <div class="side left inner 4"></div>
+                <div class="side bottom 5">
+                    <div class="dot center"></div>
+                    <div class="dot dtop dleft"></div>
+                    <div class="dot dtop dright"></div>
+                    <div class="dot dbottom dleft"></div>
+                    <div class="dot dbottom dright"></div>
+                </div>
+                <div class="side bottom inner 5"></div>
+                <div class="side back 6">
+                    <div class="dot dtop dleft"></div>
+                    <div class="dot dtop dright"></div>
+                    <div class="dot dbottom dleft"></div>
+                    <div class="dot dbottom dright"></div>
+                    <div class="dot center dleft"></div>
+                    <div class="dot center dright"></div>
+                </div>
+                <div class="side back inner 6"></div>
+                <div class="side cover x"></div>
+                <div class="side cover y"></div>
+                <div class="side cover z"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="dialog">
+        <div class="dialog-page" data-page="1">
+            <p class="dialog-inner">
+                During a commercial accountancy placement in Finance you've been tasked with costing up a new product – a platter of various Mexican themed party snacks. You've previously priced up many single item products so are confident with the process however this one is a little more complex with five different items on the platter and all at different quantities. You've gotten as far as you feel you can on your own and are now wondering who to approach for help.
+            </p>
+            <div class="dialog-options">
+                <ul>
+                    <li>
+                        <div class="radio-container full-width" gw-vertical-radio-group="positive" gw-horizontal-radio-group="e88b394f-90dc-e511-80d7-005056ac761d">
+                            <div class="centre radiobox ispos large">
+                                <i class="fa fa-check"></i>
+                            </div>
+                        </div>
+                        <br />
+                        <span>Correct Answer</span>
+                    </li>
+                    <li>
+                        <div class="radio-container full-width" gw-vertical-radio-group="positive" gw-horizontal-radio-group="e88b394f-90dc-e511-80d7-005056ac761d">
+                            <div class="centre radiobox isneg large">
+                                <i class="fa fa-times"></i>
+                            </div>
+                        </div>
+                        <br />
+                        <span>Wrong Answer</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="dialog-page hidden" data-page="2">
+            <p class="dialog-inner">
+                In this role we value integrity and tenacity. You will be expected to produce work of a high standard with determination and vigour.
+            </p>
+            <button class="dialog-closer">Close</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="Scripts/lib/jquery-2.2.2.min.js"></script>
+    <script type="text/javascript" src="Scripts/lib/jquery-ui-1.11.2.min.js"></script>
+    <script type="text/javascript" src="Scripts/lib/easeljs-0.8.2.min.js"></script>
+    <script type="text/javascript" src="Scripts/lib/webgl-0.8.2.min.js"></script>
+    <script type="text/javascript" src="Scripts/app/dice.js"></script>
+    <script type="text/javascript" src="Scripts/app/radio-pulse.js"></script>
+    <script type="text/javascript" src="Scripts/app/game.js"></script>
+    <script type="text/javascript" src="Scripts/app/index.js"></script>
+</body>
 </html>
