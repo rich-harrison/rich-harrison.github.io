@@ -178,7 +178,9 @@ aj.game.prototype = {
 
         var me = this;
 
-        me.dialog.fadeOut();
+        me.dialog.fadeOut(function() {
+            me.resetDialog();
+        });
 
         setTimeout(function () {
 
