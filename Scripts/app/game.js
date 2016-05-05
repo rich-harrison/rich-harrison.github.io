@@ -1,9 +1,9 @@
-﻿var aj = {}
-
-aj.game = (function (args) {
+﻿aj.game = (function (args) {
 
     var me = this;
     me.root = args.root;
+    me.pager = args.pager;
+
     me.canvas;
     me.sizeX = 8,
     me.sizeY = 8,
@@ -13,14 +13,19 @@ aj.game = (function (args) {
     me.tiles = new Array(),
     me.context,
     me.tileBackground,
-    me.playerCurrentTile = 1,
-    me.player,
-    me.playerPosX = 45,
-    me.playerPosY = 45,
+    me.players = new Array(),
+    me.currentPlayerTurn = 1;
+    me.iAmPlayer = 1;
     me.dialog,
+    me.playerCount = 4;
     me.orange = "#f05126";
     me.purple = "#422562";
     me.blue = "#51c5dc";
+    me.pink = "#eb1378";
+    me.green = '#d3dc26';
+    me.red = '#c93149';
+
+    $.extend(me, args);
     me.init();
 });
 
@@ -34,42 +39,72 @@ aj.game.prototype = {
         me.canvas.height = 750;
         me.context = me.canvas.getContext("2d");
         me.dialog = me.root.find('.dialog');
-        me.tiles = new Array();
 
+        me.reset();
         me.renderBoard();
-        me.initPlayer();
-        me.initDice();
+        me.initPlayers();
         me.initEvents();
+    },
+
+    reset() {
+
+        var me = this;
+        me.context.clearRect(0, 0, me.canvas.width, me.canvas.height);
+        executeRoll();
+        me.resetDialog();
+        me.root.find('.btn-roll-dice').text('Player 1 Roll Die');
     },
 
     initEvents() {
 
         var me = this;
 
-        me.root.on('click', '.dialog .radiobox', function() {
+        me.root.off('click');
+
+        me.root.on('click', '.dialog .radiobox', function () {
 
             var sender = $(this);
             var currentPage = sender.closest('.dialog-page');
             var targetPageIndex = parseInt(currentPage.attr('data-page')) + 1;
-            currentPage.fadeOut(function() {
+            currentPage.fadeOut(function () {
                 currentPage.siblings('.dialog-page[data-page="' + targetPageIndex + '"]').fadeIn();
             });
         });
 
-        me.root.on('click', '.dialog .dialog-closer', function() {
-            me.dialog.fadeOut(function() {
+        me.root.on('click', '.dialog .dialog-closer', function () {
+            me.dialog.fadeOut(function () {
                 me.resetDialog();
             });
         });
+
+        me.root.on('click', '.btn-end-game', function () {
+            me.pager.next();
+        });
+
+        me.root.on('click', '.btn-roll-dice', function () {
+            me.rollDice($(this));
+        });
     },
 
-    initDice() {
+    rollDice(sender) {
+
         var me = this;
-        me.root.on('click', '.roll-button', function() {
-            var n = Math.floor(Math.random() * 6) + 1;
+
+        var n = Math.floor(Math.random() * 6) + 1;
+
+        me.dialog.fadeOut(function () {
+            me.resetDialog();
             executeRoll(n);
-            me.movePlayerByN(n);
         });
+
+        setTimeout(function () {
+            me.movePlayerByN(n, me.currentPlayerTurn);
+            me.currentPlayerTurn++;
+            if (me.currentPlayerTurn > me.players.length) {
+                me.currentPlayerTurn = 1;
+            }
+            sender.text('Player ' + me.currentPlayerTurn + ' Roll Die');
+        }, 3500);
     },
 
     renderBoard() {
@@ -155,59 +190,117 @@ aj.game.prototype = {
         curTile++;
     },
 
-    renderPlayer(tileNumber) {
+    renderPlayer(tileNumber, playerNumber, redrawN) {
 
         var me = this;
         var newPos = me.tiles[tileNumber - 1];
 
-        me.context.fillStyle = me.blue;
-        me.context.lineWidth = "3";
+        var playerColor = me.getColour(playerNumber);
+
+        var occupierCount = 0;
+        for (var p = 0; p < me.players.length; p++) {
+            var player = me.players[p];
+            if (player[1] === tileNumber && player[0] !== playerNumber)
+                occupierCount++;
+        }
+
+        var offset = 40 / (occupierCount + 1) * (redrawN - 1);
+        me.context.fillStyle = playerColor;
+        me.context.lineWidth = "2";
         me.context.strokeStyle = "white";
         me.context.beginPath();
-        me.context.arc(newPos[1] + 35, newPos[2] + 35, 20, 0, Math.PI * 2, true);
+        me.context.arc(newPos[1] + 20 + offset, newPos[2] + 20 + offset, 15, 0, Math.PI * 2, true);
         me.context.fill();
         me.context.stroke();
+        me.context.font = "14px Panton";
+        me.context.fillStyle = "#ffffff";
+        me.context.fillText(playerNumber, newPos[1] + 20 + offset, newPos[2] + 25 + offset);
         me.context.closePath();
+    },
+
+    getColour(n) {
+        var me = this;
+        switch (n) {
+            case 1:
+                return me.blue;
+            case 2:
+                return me.pink;
+            case 3:
+                return me.red;
+            case 4:
+                return me.green;
+            case 5:
+                return me.orange;
+            case 6:
+                return me.purple;
+            default:
+                return '#000000';
+        }
     },
 
     isEven(n) {
         return n % 2 === 0;
     },
 
-    movePlayerByN(n) {
+    movePlayerByN(n, playerNumber) {
 
         var me = this;
 
-        me.dialog.fadeOut(function() {
-            me.resetDialog();
-        });
+        var currentTile = me.players[playerNumber - 1][1];
 
-        setTimeout(function () {
+        var target = currentTile + n;
 
-            var target = me.playerCurrentTile + n;
+        if (target > me.tiles.length) {
+            target = target - me.tiles.length;
+        }
 
-            if (target > me.tiles.length) {
-                target = target - me.tiles.length;
+        var curPos = me.tiles[currentTile - 1];
+
+        me.renderTile(curPos[1], curPos[2], currentTile);
+
+        me.players[playerNumber - 1][1] = target;
+
+        var newPos = me.tiles[target - 1];
+        me.renderTile(newPos[1], newPos[2], target);
+
+        var redrawN = 0;
+        for (var c = 0; c < me.players.length; c++) {
+            var player = me.players[c];
+            if (player[0] !== playerNumber && player[1] === target) {
+                redrawN++;
+                me.renderPlayer(player[1], player[0], redrawN);
             }
+        }
 
-            var curPos = me.tiles[me.playerCurrentTile - 1];
+        me.renderPlayer(target, playerNumber, redrawN + 1);
 
-            me.renderTile(curPos[1], curPos[2], me.playerCurrentTile);
-
-            me.renderPlayer(target);
-
-            me.playerCurrentTile = target;
-
-            if (me.isEven(me.playerCurrentTile)) {
-                me.raiseEvent();
+        var redrawN = 0;
+        for (var c = 0; c < me.players.length; c++) {
+            var player = me.players[c];
+            if (player[0] !== playerNumber && player[1] === currentTile) {
+                redrawN++;
+                me.renderPlayer(player[1], player[0], redrawN);
             }
-        }, 3500);
+        }
+
+        if (me.isEven(target) && playerNumber === me.iAmPlayer) {
+            me.raiseEvent();
+        }
     },
 
-    initPlayer() {
+    initPlayers() {
 
         var me = this;
-        me.renderPlayer(1);
+        var startPanel = 1;
+        for (var i = 0; i < me.playerCount; i++) {
+            var playerNumber = i + 1;
+            me.players.push([playerNumber, startPanel]);
+        }
+
+        for (var x = 0; x < me.players.length; x++) {
+            var player = me.players[x];
+            me.renderPlayer(startPanel, player[0], player[0]);
+        }
     },
 
     raiseEvent() {
@@ -220,5 +313,6 @@ aj.game.prototype = {
         me.dialog.find('.radiobox.ticked').removeClass('ticked');
         me.dialog.find('.dialog-page').hide();
         me.dialog.find('.dialog-page[data-page="1"]').show();
+        me.dialog.hide();
     }
 }

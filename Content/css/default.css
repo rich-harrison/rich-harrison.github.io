@@ -9,6 +9,10 @@
   background: -webkit-linear-gradient(top, #071a1e 0%, #274249 100%);
   background: linear-gradient(to bottom, #071a1e 0%, #274249 100%);
   font-family: Panton, sans-serif;
+  color: white;
+}
+div {
+  box-sizing: border-box;
 }
 ul {
   list-style: none;
@@ -23,20 +27,57 @@ ul li {
 .hidden {
   display: none;
 }
-button {
+button,
+.btn {
   padding: 10px;
   background-color: white;
   border-radius: 8px;
   cursor: pointer;
   margin: 0 auto;
-  display: block;
+  display: inline-block;
   margin-top: 100px;
   border: 3px solid #f05126;
   color: #422562;
   font-weight: bold;
 }
 button:active,
+.btn:active,
 button:hover,
-button:focus {
+.btn:hover,
+button:focus,
+.btn:focus {
   outline: none;
+}
+.row {
+  width: 100%;
+}
+.row .col {
+  float: left;
+}
+.fifth {
+  width: 20%;
+}
+.quarter {
+  width: 25%;
+}
+.third {
+  width: 33.33333%;
+}
+.half {
+  width: 50%;
+}
+.two-third {
+  width: 66.66666%;
+}
+.three-quarter {
+  width: 75%;
+}
+.full-width {
+  width: 100%;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
 }

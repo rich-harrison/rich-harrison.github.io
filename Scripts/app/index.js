@@ -2,9 +2,11 @@
 
 doc.on('ready', function() {
 
-    var gameArgs = {
-        root: doc.find('body')
+    var root = doc.find('.pages');
+
+    var args = {
+        root: root
     }
 
-    var game = new aj.game(gameArgs);
+    var pages = new aj.pages(args);
 });
